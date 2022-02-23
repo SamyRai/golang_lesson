@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"golang_lesson/internal/delivery"
 )
 
 var ErrZeroSizeBoardError = errors.New("the board size should be more than zero")
@@ -11,7 +12,9 @@ type GameBoard struct {
 	board [][]string
 }
 
-func NewGameBoard(size int) (GameBoard, error) {
+func NewGameBoard(delivery delivery.Delivery) (GameBoard, error) {
+	size := delivery.BoardData()
+
 	if size == 0 {
 		return GameBoard{}, ErrZeroSizeBoardError
 	}

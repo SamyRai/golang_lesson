@@ -7,14 +7,26 @@ import (
 )
 
 func main() {
-	input := new(delivery.Cli)
-	player, err := models.PreparePlayer()
-	if err != nil {
-		panic("something wierd happened")
+	cli := new(delivery.Cli)
+	var player models.Player
+	var board models.GameBoard
+	var err error
+
+	for {
+		player, err = models.NewPlayer(cli)
+		if err != nil {
+			cli.Notify(err.Error())
+		} else {
+			break
+		}
 	}
-	board, err := models.PrepareBoard()
-	if err != nil {
-		panic("something wierd happened")
+	for {
+		board, err = models.NewGameBoard(cli)
+		if err != nil {
+			cli.Notify(err.Error())
+		} else {
+			break
+		}
 	}
 	fmt.Printf("%v", player)
 	fmt.Printf("%v", board)

@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"golang_lesson/internal/delivery"
 	"strings"
 )
 
@@ -13,7 +14,8 @@ type Player struct {
 	side string
 }
 
-func NewPlayer(name string, side string) (Player, error) {
+func NewPlayer(delivery delivery.Delivery) (Player, error) {
+	name, side := delivery.PlayerData()
 	side = strings.ToLower(side)
 
 	if side != "o" && side != "x" {
