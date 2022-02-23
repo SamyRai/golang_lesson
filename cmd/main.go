@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
-	models2 "golang_lesson/internal/models"
+	"golang_lesson/internal/delivery"
+	"golang_lesson/internal/models"
 )
 
 func main() {
-
-	player, err := models2.PreparePlayer()
+	input := new(delivery.Cli)
+	player, err := models.PreparePlayer()
 	if err != nil {
 		panic("something wierd happened")
 	}
-	board, err := models2.PrepareBoard()
+	board, err := models.PrepareBoard()
 	if err != nil {
 		panic("something wierd happened")
 	}

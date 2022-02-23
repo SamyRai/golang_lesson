@@ -2,11 +2,9 @@ package models
 
 import (
 	"errors"
-	"fmt"
 )
 
-const zeroSizeBoardError = "the board size should be more than zero"
-const moveOutsideRangeError = "your move is outside the board range"
+var ErrZeroSizeBoardError = errors.New("the board size should be more than zero")
 
 type GameBoard struct {
 	size  int
@@ -15,31 +13,19 @@ type GameBoard struct {
 
 func NewGameBoard(size int) (GameBoard, error) {
 	if size == 0 {
-		return GameBoard{}, errors.New(zeroSizeBoardError)
+		return GameBoard{}, ErrZeroSizeBoardError
 	}
 	return GameBoard{size: size}, nil
 }
 
-func PrepareBoard() (GameBoard, error) {
-	for {
-		var boardSize int
-		fmt.Println("Please enter a board size")
-		fmt.Scan(&boardSize)
-		board, err := NewGameBoard(boardSize)
-		if err == nil {
-			return board, nil
-		} else {
-			fmt.Println(err, "\n Try Again!")
-		}
-	}
+func (g GameBoard) Size() int {
+	return g.size
 }
 
-func (g *GameBoard) MakeMove(xCoordinate int, yCoordinate int, player Player) error {
-	if xCoordinate <= g.size || yCoordinate <= g.size {
-		return errors.New(moveOutsideRangeError)
-	}
-	g.board[xCoordinate+1][yCoordinate+1] = player.side
-	return nil
+func (g GameBoard) RecordMove(xCoordinate int, yCoordinate int, symbol string) (GameBoard, error) {
+	g.board[xCoordinate+1][yCoordinate+1] = symbol
+
+	return g, nil
 }
 
 func (g GameBoard) ShowBoard() {
