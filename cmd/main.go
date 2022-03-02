@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"golang_lesson/internal/delivery"
+	"golang_lesson/internal/game"
 	"golang_lesson/internal/models"
 )
 
@@ -28,6 +29,13 @@ func main() {
 			break
 		}
 	}
-	fmt.Printf("%v", player)
-	fmt.Printf("%v", board)
+	fmt.Printf("%v\n", player)
+	board.ShowBoard(cli)
+	for i := 0; i < board.Size()*board.Size(); i++ {
+		err = game.MakeMove(board, cli, player)
+		if err != nil {
+			fmt.Println(err)
+		}
+		board.ShowBoard(cli)
+	}
 }

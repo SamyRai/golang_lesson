@@ -2,7 +2,7 @@ package models
 
 import (
 	"errors"
-	"golang_lesson/internal/delivery"
+	"golang_lesson/internal/delivery/common"
 	"strings"
 )
 
@@ -14,7 +14,7 @@ type Player struct {
 	side string
 }
 
-func NewPlayer(delivery delivery.Delivery) (Player, error) {
+func NewPlayer(delivery common.Delivery) (Player, error) {
 	name, side := delivery.PlayerData()
 	side = strings.ToLower(side)
 
