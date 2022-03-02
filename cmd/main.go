@@ -29,8 +29,7 @@ func main() {
 			break
 		}
 	}
-	fmt.Printf("%v\n", player)
-	board.ShowBoard(cli)
+
 	for i := 0; i < board.Size()*board.Size(); i++ {
 		err = game.MakeMove(board, cli, player)
 		if err != nil {

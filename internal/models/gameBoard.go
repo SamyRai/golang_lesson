@@ -36,7 +36,7 @@ func (g *GameBoard) RecordMove(xCoordinate int, yCoordinate int, player Player) 
 }
 
 func (g GameBoard) IsOccupied(xCoordinate int, yCoordinate int) bool {
-	return g.board[xCoordinate][yCoordinate] == ""
+	return g.board[xCoordinate-1][yCoordinate-1] == ""
 }
 
 func (g GameBoard) ShowBoard(delivery common.Delivery) {
