@@ -2,49 +2,43 @@ package models
 
 import (
 	"errors"
-	"fmt"
+	"golang_lesson/internal/delivery/common"
 )
 
-const zeroSizeBoardError = "the board size should be more than zero"
-const moveOutsideRangeError = "your move is outside the board range"
+var ErrZeroSizeBoard = errors.New("the board size should be more than zero")
 
 type GameBoard struct {
 	size  int
 	board [][]string
 }
 
-func NewGameBoard(size int) (GameBoard, error) {
+func NewGameBoard(delivery common.Delivery) (GameBoard, error) {
+	size := delivery.BoardData()
+
 	if size == 0 {
-		return GameBoard{}, errors.New(zeroSizeBoardError)
+		return GameBoard{}, ErrZeroSizeBoard
 	}
-	return GameBoard{size: size}, nil
+	var board = make([][]string, size, 100)
+	for i := 0; i < size; i++ {
+		board[i] = make([]string, size, 100)
+	}
+	return GameBoard{size: size, board: board}, nil
 }
 
-func PrepareBoard() (GameBoard, error) {
-	for {
-		var boardSize int
-		fmt.Println("Please enter a board size")
-		fmt.Scan(&boardSize)
-		board, err := NewGameBoard(boardSize)
-		if err == nil {
-			return board, nil
-		} else {
-			fmt.Println(err, "\n Try Again!")
-		}
-	}
+func (g GameBoard) Size() int {
+	return g.size
 }
 
-func (g *GameBoard) MakeMove(xCoordinate int, yCoordinate int, player Player) error {
-	if xCoordinate <= g.size || yCoordinate <= g.size {
-		return errors.New(moveOutsideRangeError)
-	}
-	g.board[xCoordinate+1][yCoordinate+1] = player.side
-	return nil
+func (g *GameBoard) RecordMove(xCoordinate int, yCoordinate int, player Player) (GameBoard, error) {
+	g.board[xCoordinate-1][yCoordinate-1] = player.Side()
+
+	return *g, nil
 }
 
-func (g GameBoard) ShowBoard() {
-	//for row := range g.board {
-	//	fmt.Printf("%v", row)
-	//}
-	//	TODO: Make board printer
+func (g GameBoard) IsOccupied(xCoordinate int, yCoordinate int) bool {
+	return g.board[xCoordinate-1][yCoordinate-1] == ""
+}
+
+func (g GameBoard) ShowBoard(delivery common.Delivery) {
+	delivery.ShowBoard(g.board)
 }

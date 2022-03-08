@@ -2,19 +2,39 @@ package main
 
 import (
 	"fmt"
-	models2 "golang_lesson/internal/models"
+	"golang_lesson/internal/delivery"
+	"golang_lesson/internal/game"
+	"golang_lesson/internal/models"
 )
 
 func main() {
+	cli := new(delivery.Cli)
+	var player models.Player
+	var board models.GameBoard
+	var err error
 
-	player, err := models2.PreparePlayer()
-	if err != nil {
-		panic("something wierd happened")
+	for {
+		player, err = models.NewPlayer(cli)
+		if err != nil {
+			cli.Notify(err.Error())
+		} else {
+			break
+		}
 	}
-	board, err := models2.PrepareBoard()
-	if err != nil {
-		panic("something wierd happened")
+	for {
+		board, err = models.NewGameBoard(cli)
+		if err != nil {
+			cli.Notify(err.Error())
+		} else {
+			break
+		}
 	}
-	fmt.Printf("%v", player)
-	fmt.Printf("%v", board)
+
+	for i := 0; i < board.Size()*board.Size(); i++ {
+		err = game.MakeMove(board, cli, player)
+		if err != nil {
+			fmt.Println(err)
+		}
+		board.ShowBoard(cli)
+	}
 }
